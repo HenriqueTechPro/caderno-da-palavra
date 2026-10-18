@@ -25,9 +25,27 @@ No diretório do projeto, execute `python3 -m http.server 8080` e abra `http://l
 - **A IA não vem habilitada automaticamente:** requer implantação do backend abaixo e chave do provedor no ambiente do servidor.
 - O PWA e o salvamento offline devem ser testados no endereço HTTPS publicado em Android/iOS antes de produção.
 
-## Exemplo de backend para IA (Node.js ou função serverless)
+## Integração Gemini gratuita (Vercel)
 
-Veja `api/summary.example.mjs`. Use a chave `OPENAI_API_KEY` em variável de ambiente **no servidor**, nunca no frontend. Este endpoint não tem autenticação, por isso a implantação pública exige controles antiexcesso (rate limiting, orçamento/cota e proteção de origem). Configure a URL HTTPS no menu Ajustes.
+A função `api/summary.mjs` usa exclusivamente `gemini-3.5-flash-lite`, cuja modalidade gratuita depende de disponibilidade/cotas do seu projeto no Google AI Studio.
+
+1. Crie uma chave para um projeto **sem faturamento pago** em https://aistudio.google.com/apikey.
+2. Na Vercel, abra o projeto → Settings → Environment Variables, e cadastre para **Production**:
+   - `GEMINI_API_KEY`: chave criada no Google AI Studio.
+   - `AI_ACCESS_TOKEN`: um código privado longo (pelo menos 16 caracteres, idealmente 24+ aleatórios), diferente da chave Google.
+3. Faça **Redeploy** após definir as variáveis.
+4. No PWA, abra Ajustes, informe **somente** o código `AI_ACCESS_TOKEN`, e clique em **Ativar IA nesta sessão**.
+5. Abra um culto com anotações ou referências e clique em **Gerar resumo com IA**.
+
+A chave Google permanece no servidor e **nunca** é inserida no navegador. O código do proprietário é mantido em `sessionStorage` (precisa ser informado novamente numa nova sessão). Os dados do culto são enviados ao Google apenas quando você aciona a geração.
+
+**Segurança e custos:** o token privado protege o endpoint de acessos anônimos sem conhecê-lo, mas não é uma solução de login e não substitui proteção avançada de rate limiting. Não divulgue o token; restrinja cotas no Google AI Studio e monitore o uso. Para garantir gratuidade, não habilite faturamento pago. A modalidade gratuita pode usar conteúdo enviado para melhoria de produtos, conforme os termos do Google. O modo IA não funciona offline, mas os resumos salvos ficam disponíveis no dispositivo.
+
+A função `api/summary.example.mjs` é um exemplo histórico para OpenAI e não é utilizada pelo aplicativo.
+
+### Testes
+
+`node --test tests/summary.test.mjs`
 
 ## Próxima etapa
 
