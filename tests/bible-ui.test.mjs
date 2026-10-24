@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {selectorMarkup,biblePageMarkup,savedPassageMarkup} from '../bible-ui.js';
+test('seletor inclui livro, capítulo e carregamento',()=>{const x=selectorMarkup('culto');assert.match(x,/data-bible-book="culto"/);assert.match(x,/data-bible-chapter="culto"/);assert.match(x,/data-bible-load="culto"/);assert.match(x,/data-bible-add="culto"/)});
+test('leitura permite vincular ao culto existente',()=>{const html=biblePageMarkup([{id:'c1',title:'Culto de domingo',date:'2026-10-24'}]);assert.match(html,/value="c1"/);assert.match(html,/Adicionar seleção ao culto/)});
+test('formulário protege html de usuário',()=>{const html=biblePageMarkup([{id:'bad" onclick="x',title:'<script>alert(1)</script>'}]);assert.doesNotMatch(html,/<script>/);assert.match(html,/&lt;script&gt;/)});
+test('passagem salva traz texto e crédito ou botão para buscar',()=>{const no=savedPassageMarkup({id:'1'}),yes=savedPassageMarkup({id:'2',text:'16. Deus amou <todos>',translation:'Almeida'});assert.match(no,/data-bible-expand/);assert.match(yes,/&lt;todos&gt;/);assert.match(yes,/Almeida/)});
