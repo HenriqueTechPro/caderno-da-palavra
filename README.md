@@ -59,3 +59,13 @@ Migrar o MVP para React + TypeScript em arquitetura modular se o projeto exigir 
 - Em **Ajustes > Atualizações do aplicativo**, verifique novas versões e clique em **Atualizar agora**. O novo service worker só é ativado por ação do usuário.
 - Notas pendentes são salvas no IndexedDB antes de reinicializar. O service worker não armazena respostas de `/api/`.
 - Testes: `node --test tests/*.test.mjs`. Faça backups periódicos em JSON; cookies, cache do PWA e IndexedDB são armazenamentos independentes.
+
+
+## v1.2 — leitor bíblico e estudos Gemini
+
+- Página **Bíblia**, com seleção de livro, capítulo e intervalo por toque. Leitura online por https://bible-api.com/ da tradução **João Ferreira de Almeida**, identificada como domínio público pelo provedor; observe os limites gratuitos da API.
+- Na tela do culto, a referência pode ser digitada ou escolhida. Textos consultados ficam vinculados à passagem e disponíveis em PDF, com crédito da tradução.
+- Registros anteriores: botão **Ver texto bíblico**. Capítulos lidos são armazenados no IndexedDB separado `caderno-bible-cache` para releitura offline (não é download da Bíblia completa).
+- IA: modos **Resumo completo**, **Estudo bíblico aprofundado** e **Perguntas para revisão**. O prompt separa o que foi registrado da reflexão sugerida. Textos salvos são enviados ao Gemini apenas mediante o clique de geração.
+- Sem modificações no banco de cultos ou no cookie de autenticação; app PWA v1.2.0.
+- Testes: `npm test` (Node test runner, sem bibliotecas externas).

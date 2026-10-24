@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {chapterOptions,bibleUrl,normalizeChapter,passageFromChapter,getChapter} from '../bible-reader.js';
+const sample={translation_id:'almeida',verses:[{chapter:3,verse:16,text:'Porque Deus amou o mundo'},{chapter:3,verse:17,text:'Deus enviou o Filho'}]};
+test('66 livros e capítulos selecionáveis',()=>{assert.equal(chapterOptions('Salmos').length,150);assert.equal(chapterOptions('Filemom').length,1);assert.equal(chapterOptions('Caderno').length,0)});
+test('valida URL da edição Almeida',()=>{assert.match(bibleUrl('João',3),/John%203/);assert.match(bibleUrl('1 Coríntios',13),/1%20Corinthians%2013/);assert.throws(()=>bibleUrl('João',99))});
+test('valida capítulo e edição recebida',()=>{assert.throws(()=>normalizeChapter({...sample,translation_id:'nvi'},'João',3));assert.throws(()=>normalizeChapter({translation_id:'almeida',verses:[]},'João',3));assert.equal(normalizeChapter(sample,'João',3).verses.length,2)});
+test('monta capítulo e intervalo',()=>{let chapter=normalizeChapter(sample,'João',3);assert.equal(passageFromChapter(chapter,16,17).label,'João 3:16-17');assert.match(passageFromChapter(chapter).text,/17\. Deus enviou/);assert.throws(()=>passageFromChapter(chapter,14,18))});
+test('busca capítulo e reutiliza cache',async()=>{let calls=0;const fetcher=async()=>{calls++;return {ok:true,json:async()=>sample}};const first=await getChapter('João',3,{fetcher});const again=await getChapter('João',3,{fetcher});assert.equal(first.verses.length,2);assert.equal(again.verses.length,2);assert.equal(calls,1)});
