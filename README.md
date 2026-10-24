@@ -50,3 +50,12 @@ A função `api/summary.example.mjs` é um exemplo histórico para OpenAI e não
 ## Próxima etapa
 
 Migrar o MVP para React + TypeScript em arquitetura modular se o projeto exigir crescimento de equipe, acrescentar validação exata de todos os versículos, testes end-to-end e uma integração bíblica licenciada. A versão atual prioriza funcionar imediatamente com zero dependências externas.
+
+## Atualização v1.1.0 — autorização e atualizações do PWA
+
+- Em **Ajustes > Inteligência artificial**, o código `AI_ACCESS_TOKEN` é validado por `POST /api/access`.
+- A sessão permanece até 30 dias com cookie assinado `HttpOnly; Secure; SameSite=Lax`. O código não é guardado no `localStorage`; a chave `GEMINI_API_KEY` permanece na Vercel.
+- A função `POST /api/summary` aceita o cookie seguro. Alterar `AI_ACCESS_TOKEN` invalida sessões existentes.
+- Em **Ajustes > Atualizações do aplicativo**, verifique novas versões e clique em **Atualizar agora**. O novo service worker só é ativado por ação do usuário.
+- Notas pendentes são salvas no IndexedDB antes de reinicializar. O service worker não armazena respostas de `/api/`.
+- Testes: `node --test tests/*.test.mjs`. Faça backups periódicos em JSON; cookies, cache do PWA e IndexedDB são armazenamentos independentes.
