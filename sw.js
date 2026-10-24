@@ -1,7 +1,7 @@
-const CACHE_NAME = 'palavra-v4-pwa-manual-update';
+const CACHE_NAME = 'palavra-v5-bible-study';
 const APP_SHELL = [
   './', './index.html', './style.css', './app.js', './pwa-updates.js', './db.js',
-  './bible.js', './manifest.webmanifest', './icons/icon.svg',
+  './bible.js', './bible-reader.js', './bible-ui.js', './manifest.webmanifest', './icons/icon.svg',
   './icons/icon-192.png', './icons/icon-512.png'
 ];
 

@@ -1,5 +1,5 @@
 /** Manual-update UI for the offline-first Caderno da Palavra PWA. */
-export const APP_VERSION = '1.1.0';
+export const APP_VERSION = '1.2.0';
 
 export function createUpdateManager({ browser, site, notify, persistDraft, changed, reload }) {
   let registration = null;
