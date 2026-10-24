@@ -4,6 +4,7 @@
  * This PWA has no account system, so a separate owner-only access token is required.
  */
 import { createHash, timingSafeEqual } from 'node:crypto';
+import { isAuthorized } from '../lib/ai-auth.mjs';
 
 const MODEL = 'gemini-3.5-flash-lite';
 const MAX_REQUEST_BYTES = 24_000;
@@ -78,7 +79,7 @@ export default async function handler(req, res) {
   if (!apiKey || !expectedToken || expectedToken.length < 16) {
     return json(res, 503, { error: 'IA ainda não configurada na Vercel.' });
   }
-  if (!verifyAccess(req.headers['x-caderno-access'], expectedToken)) {
+  if (!isAuthorized(req, expectedToken)) {
     return json(res, 401, { error: 'Código de acesso incorreto. Confira Ajustes.' });
   }
   if (!String(req.headers['content-type'] || '').toLowerCase().includes('application/json')) {
